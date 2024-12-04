@@ -2,7 +2,7 @@ service: groups-admn-bff
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs20.x
   region: ${opt:region}
   stage: ${opt:stage}
   profile: groups-admn-bff-${opt:stage}
@@ -12,7 +12,6 @@ plugins:
   - serverless-plugin-include-dependencies
   - serverless-plugin-common-excludes
   - serverless-plugin-custom-domain
-  - serverless-plugin-aws-alerts
   - serverless-plugin-log-subscription
   - serverless-plugin-tracing
   - serverless-prune-plugin
@@ -23,7 +22,6 @@ package:
     - serverless/**
 
 custom:
-  alerts: ${file(./serverless/alerts.yml)}
   config: ${file(./serverless/config/${opt:stage}-${opt:region}.yml)}
   domain: ${self:custom.config.domain}
   logSubscription: ${self:custom.config.logSubscription}

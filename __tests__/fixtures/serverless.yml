@@ -5,7 +5,6 @@ provider:
 
 plugins:
   - ../..
-  - serverless-plugin-aws-alerts
 
 custom:
   splitStacks:
@@ -106,3 +105,128 @@ resources:
                 Service:
                   - lambda.amazonaws.com
               Action: sts:AssumeRole
+
+    FunctionAErrorAlarm:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmName: "FunctionAErrorAlarm"
+        AlarmDescription: "Alarm if the function a produces errors"
+        Namespace: "AWS/Lambda"
+        MetricName: "Errors"
+        Dimensions:
+          - Name: "FunctionName"
+            Value:
+              Ref: ALambdaFunction
+        Statistic: "Sum"
+        Period: 300
+        EvaluationPeriods: 1
+        Threshold: 5
+        ComparisonOperator: "GreaterThanOrEqualToThreshold"
+        TreatMissingData: "notBreaching"
+        AlarmActions:
+          - Ref: AlarmTopic
+
+    FunctionAThrottleAlarm:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmName: "FunctionAThrottleAlarm"
+        AlarmDescription: "Alarm if the function a is throttled"
+        Namespace: "AWS/Lambda"
+        MetricName: "Throttles"
+        Dimensions:
+          - Name: "FunctionName"
+            Value:
+              Ref: ALambdaFunction
+        Statistic: "Sum"
+        Period: 300
+        EvaluationPeriods: 1
+        Threshold: 10
+        ComparisonOperator: "GreaterThanOrEqualToThreshold"
+        TreatMissingData: "notBreaching"
+        AlarmActions:
+          - Ref: AlarmTopic
+
+    FunctionBErrorAlarm:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmName: "FunctionBErrorAlarm"
+        AlarmDescription: "Alarm if the function b produces errors"
+        Namespace: "AWS/Lambda"
+        MetricName: "Errors"
+        Dimensions:
+          - Name: "FunctionName"
+            Value:
+              Ref: BLambdaFunction
+        Statistic: "Sum"
+        Period: 300
+        EvaluationPeriods: 1
+        Threshold: 5
+        ComparisonOperator: "GreaterThanOrEqualToThreshold"
+        TreatMissingData: "notBreaching"
+        AlarmActions:
+          - Ref: AlarmTopic
+
+    FunctionBThrottleAlarm:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmName: "FunctionBThrottleAlarm"
+        AlarmDescription: "Alarm if the function b is throttled"
+        Namespace: "AWS/Lambda"
+        MetricName: "Throttles"
+        Dimensions:
+          - Name: "FunctionName"
+            Value:
+              Ref: BLambdaFunction
+        Statistic: "Sum"
+        Period: 300
+        EvaluationPeriods: 1
+        Threshold: 10
+        ComparisonOperator: "GreaterThanOrEqualToThreshold"
+        TreatMissingData: "notBreaching"
+        AlarmActions:
+          - Ref: AlarmTopic
+
+    FunctionCErrorAlarm:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmName: "FunctionCErrorAlarm"
+        AlarmDescription: "Alarm if the function c produces errors"
+        Namespace: "AWS/Lambda"
+        MetricName: "Errors"
+        Dimensions:
+          - Name: "FunctionName"
+            Value:
+              Ref: CLambdaFunction
+        Statistic: "Sum"
+        Period: 300
+        EvaluationPeriods: 1
+        Threshold: 5
+        ComparisonOperator: "GreaterThanOrEqualToThreshold"
+        TreatMissingData: "notBreaching"
+        AlarmActions:
+          - Ref: AlarmTopic
+
+    FunctionCThrottleAlarm:
+      Type: AWS::CloudWatch::Alarm
+      Properties:
+        AlarmName: "FunctionCThrottleAlarm"
+        AlarmDescription: "Alarm if the function c is throttled"
+        Namespace: "AWS/Lambda"
+        MetricName: "Throttles"
+        Dimensions:
+          - Name: "FunctionName"
+            Value:
+              Ref: CLambdaFunction
+        Statistic: "Sum"
+        Period: 300
+        EvaluationPeriods: 1
+        Threshold: 10
+        ComparisonOperator: "GreaterThanOrEqualToThreshold"
+        TreatMissingData: "notBreaching"
+        AlarmActions:
+          - Ref: AlarmTopic
+
+    AlarmTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: foo
