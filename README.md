@@ -1,6 +1,6 @@
-[![CircleCI](https://circleci.com/gh/dougmoscrop/serverless-plugin-split-stacks.svg?style=svg)](https://circleci.com/gh/dougmoscrop/serverless-plugin-split-stacks)
-
 # serverless-plugin-split-stacks
+
+Using this plugin is a bad idea. It means you've allowed your serverless service to grow in to something huge.
 
 This plugin migrates CloudFormation resources in to nested stacks in order to work around the 500 resource limit.
 
@@ -94,3 +94,13 @@ __Be careful when introducing any customizations to default config. Many kind of
 ### Force Migration
 
 Custom migrations can specify `{ force: true }` to force the migration of an existing resource in to a new stack. BE CAREFUL. This will cause a resource to be deleted and recreated. It may not even work if CloudFormation tries to create the new one before deleting the old one and they have a name or some other unique property that cannot have two resources existing at the same time. It can also mean a small window of downtime during this period, for example as an `AWS::Lambda::Permission` is deleted/recreated calls may be denied until IAM sorts things out.
+
+## Proxy Support
+
+This plugin makes use of the `proxy-agent` library, which reads environmental varaibles for configuration. To avoid conflicts with existing deployments, it is not used automatically, but instead needs to be enabled via serverless config:
+
+```yml
+custom:
+  splitStacks:
+    proxyAgent: true
+```
