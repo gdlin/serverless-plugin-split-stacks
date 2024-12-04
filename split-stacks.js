@@ -4,6 +4,7 @@ const _ = require('lodash');
 const semver = require('semver');
 
 const setDeploymentBucketEndpoint = require('./lib/deployment-bucket-endpoint');
+const setDeploymentBucketName = require('./lib/deployment-bucket-name');
 const migrateExistingResources = require('./lib/migrate-existing-resources');
 const migrateNewResources = require('./lib/migrate-new-resources');
 const replaceReferences = require('./lib/replace-references');
@@ -34,6 +35,7 @@ class ServerlessPluginSplitStacks {
     Object.assign(this,
       utils,
       { setDeploymentBucketEndpoint },
+      { setDeploymentBucketName },
       { migrateExistingResources },
       { migrateNewResources },
       { replaceReferences },
@@ -59,6 +61,7 @@ class ServerlessPluginSplitStacks {
 
     return Promise.resolve()
       .then(() => this.setDeploymentBucketEndpoint())
+      .then(() => this.setDeploymentBucketName())
       .then(() => this.migrateExistingResources())
       .then(() => this.migrateNewResources())
       .then(() => this.replaceReferences())
